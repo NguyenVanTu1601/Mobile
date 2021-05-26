@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -99,6 +101,13 @@ public class ProfileUserActivity extends AppCompatActivity {
             public void onClick(View view) {
                 startActivity(new Intent(ProfileUserActivity.this, PetsActivity.class));
                 finish();
+            }
+        });
+
+        binding.layoutProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeKeyBoard();
             }
         });
     }
@@ -230,7 +239,7 @@ public class ProfileUserActivity extends AppCompatActivity {
         database.collection(Constants.KEY_COLLECTION_USER).document(mAuth.getCurrentUser().getUid())
                 .set(user, SetOptions.merge())
                 .addOnCompleteListener(task -> {
-                    Toast.makeText(this, "Update info user to firbase firestore", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Update info user to firbase firestore", Toast.LENGTH_SHORT).show();
                     DataClient dataClient = APIUtils.getData(Constants.user_url);
                     User u = new User(mAuth.getCurrentUser().getUid(), binding.emailProfile.getText().toString(),
                             binding.addressProfile.getText().toString(), binding.nameProfile.getText().toString(),urlImage);
@@ -238,8 +247,7 @@ public class ProfileUserActivity extends AppCompatActivity {
                     createUser.enqueue(new Callback<User>() {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
-                            Toast.makeText(ProfileUserActivity.this, "add user to server" +
-                                    response.body().getId() , Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(ProfileUserActivity.this, "add user to server" + response.body().getId() , Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                             startActivity(new Intent(ProfileUserActivity.this, PetsActivity.class));
                             finish();
@@ -256,5 +264,15 @@ public class ProfileUserActivity extends AppCompatActivity {
                     dialog.dismiss();
                     Toast.makeText(this, "Fail : " + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void closeKeyBoard(){
+        View view = this.getCurrentFocus();
+        if (view != null){
+            InputMethodManager inputMethodManager = (InputMethodManager)
+                    view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            // Hide the soft keyboard
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
+        }
     }
 }

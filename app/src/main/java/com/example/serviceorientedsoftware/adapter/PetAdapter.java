@@ -60,6 +60,9 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+        if (pets == null){
+            return 0;
+        }
         return pets.size();
     }
 

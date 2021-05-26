@@ -54,10 +54,10 @@ public class ShopLocationActivity extends FragmentActivity implements OnMapReady
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng ptit = new LatLng(Double.parseDouble(Constants.SHOP_LOCATION[0]),
+        LatLng shop = new LatLng(Double.parseDouble(Constants.SHOP_LOCATION[0]),
                 Double.parseDouble(Constants.SHOP_LOCATION[1]));
-        mMap.addMarker(new MarkerOptions().position(ptit).title("Ptit"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ptit, 18));
+        mMap.addMarker(new MarkerOptions().position(shop).title("Cửa hàng thú cưng nhóm 8"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(shop, 18));
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         // get location
@@ -74,7 +74,6 @@ public class ShopLocationActivity extends FragmentActivity implements OnMapReady
         }
         mMap.setMyLocationEnabled(true);
 
-        LatLng coffee = new LatLng(20.987247879198335, 105.78391455462796);
 
     }
 

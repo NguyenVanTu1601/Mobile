@@ -131,10 +131,12 @@ public class PetsActivity extends AppCompatActivity implements NavigationView.On
                     Pattern pattern = Pattern.compile(regex);
                     Matcher matcher;
                     ArrayList<Pet> newList = new ArrayList<>();
-                    for(int i = 0; i < pets.size(); i++){
-                        matcher = pattern.matcher(pets.get(i).getName());
-                        if(matcher.find()){
-                            newList.add(pets.get(i));
+                    if (pets != null && pets.size() > 0){
+                        for(int i = 0; i < pets.size(); i++){
+                            matcher = pattern.matcher(pets.get(i).getName());
+                            if(matcher.find()){
+                                newList.add(pets.get(i));
+                            }
                         }
                     }
                     PetAdapter adapterNew = new PetAdapter(newList, PetsActivity.this);
@@ -187,7 +189,7 @@ public class PetsActivity extends AppCompatActivity implements NavigationView.On
                         String image = document.getString(Constants.KEY_IMAGE);
 
                         if(image != null && !TextUtils.isEmpty(image) ){
-                            Toast.makeText(PetsActivity.this, image, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(PetsActivity.this, image, Toast.LENGTH_SHORT).show();
                             Glide.with(PetsActivity.this)
                                     .load(image)
                                     .centerCrop()
@@ -261,7 +263,7 @@ public class PetsActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<List<Pet>> call, Throwable t) {
-                Toast.makeText(PetsActivity.this, "Không thể gọi...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(PetsActivity.this, "Không thể gọi...", Toast.LENGTH_SHORT).show();
             }
         });
     }

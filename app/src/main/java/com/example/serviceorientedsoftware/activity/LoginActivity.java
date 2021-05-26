@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.serviceorientedsoftware.MainActivity;
 import com.example.serviceorientedsoftware.R;
 import com.example.serviceorientedsoftware.constants.Constants;
@@ -31,6 +32,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
@@ -170,12 +173,29 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         if(user != null){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(mAuth.getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Intent intent = new Intent(LoginActivity.this, PetsActivity.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            addUserToFirebase(user);
+                        }
+                    }else{
+                        addUserToFirebase(user);
+                    }
+                }
+            });
 
-            addUserToFirebase(user);
             Intent intent = new Intent(LoginActivity.this, PetsActivity.class);
             startActivity(intent);
             finish();
-
         }else{
             Toast.makeText(this, "Can not login with facebook!!!",Toast.LENGTH_SHORT).show();
         }
